@@ -6,6 +6,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using RegistrationSample.DesktopUI.Helpers;
 using RegistrationSample.DesktopUI.ViewModels;
+using System.Configuration;
+using System;
+using System.IO;
 
 namespace RegistrationSample.DesktopUI
 {
@@ -18,8 +21,12 @@ namespace RegistrationSample.DesktopUI
 
         public App()
         {
+            Configuration = BuildConfig().Build();
             _host = CreateHostBuilder().Build();
         }
+
+        public IServiceProvider ServiceProvider { get; private set; }
+        public static IConfiguration Configuration { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -34,13 +41,14 @@ namespace RegistrationSample.DesktopUI
         static IHostBuilder CreateHostBuilder(string[] args = null)
         {
             return Host.CreateDefaultBuilder(args)
-                //.ConfigureAppConfiguration(config =>
-                //{
-                //    config.AddJsonFile("appsettings.json");
-                //    config.AddEnvironmentVariables();
-                //})
+                .ConfigureAppConfiguration(config =>
+                {
+                    config.AddJsonFile("appsettings.json");
+                    config.AddEnvironmentVariables();
+                })
                 .ConfigureServices(services =>
                 {
+                    services.AddSingleton(Configuration);
                     services.AddSingleton<IApiHelper, ApiHelper>();
                     services.AddScoped<ShellViewModel>();
                     services.AddScoped<LoginViewModel>();
@@ -51,6 +59,14 @@ namespace RegistrationSample.DesktopUI
 
         }
 
+        static ConfigurationBuilder BuildConfig()
+        {
+            var builder = new ConfigurationBuilder();
+            builder.SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", false, true);
+            return builder;
+        }
+
         private static Window GetShellWindow<T, V>(string title, T dataContext, V content)
         {
             return new Window
@@ -58,6 +74,8 @@ namespace RegistrationSample.DesktopUI
                 Title = title,
                 DataContext = dataContext,
                 Content = content,
+                MinHeight = 400,
+                MinWidth = 400,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };

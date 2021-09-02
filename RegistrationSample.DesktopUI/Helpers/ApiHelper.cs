@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using RegistrationSample.DesktopUI.Models;
 
 namespace RegistrationSample.DesktopUI.Helpers
@@ -10,14 +12,18 @@ namespace RegistrationSample.DesktopUI.Helpers
     public class ApiHelper : IApiHelper
     {
         private HttpClient _apiClient;
-        public ApiHelper()
+        private readonly IConfiguration _config;
+        public ApiHelper(IConfiguration configuration)
         {
             InitializeClient();
+            _config = configuration;
         }
 
         private void InitializeClient()
         {
+            //var apiUri = _config["API"];
             _apiClient = new();
+            _apiClient.BaseAddress = new Uri("https://localhost:44393/");
             _apiClient.DefaultRequestHeaders.Accept.Clear();
             _apiClient.DefaultRequestHeaders.Accept.Add(new("application/json"));
         }
