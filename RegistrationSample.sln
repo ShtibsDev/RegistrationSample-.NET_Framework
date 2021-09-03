@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegistrationSample.OldAPI", "RegistrationSample.OldAPI\RegistrationSample.OldAPI.csproj", "{5B305A1F-3E5F-4595-A2AB-6B2B0555AE0D}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RegistrationSample.Data", "RegistrationSample.Data\RegistrationSample.Data.sqlproj", "{9D978E80-7EF5-4B5B-9D6A-125BC4116E99}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,12 @@ Global
 		{5B305A1F-3E5F-4595-A2AB-6B2B0555AE0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B305A1F-3E5F-4595-A2AB-6B2B0555AE0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B305A1F-3E5F-4595-A2AB-6B2B0555AE0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D978E80-7EF5-4B5B-9D6A-125BC4116E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D978E80-7EF5-4B5B-9D6A-125BC4116E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D978E80-7EF5-4B5B-9D6A-125BC4116E99}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9D978E80-7EF5-4B5B-9D6A-125BC4116E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D978E80-7EF5-4B5B-9D6A-125BC4116E99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D978E80-7EF5-4B5B-9D6A-125BC4116E99}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
