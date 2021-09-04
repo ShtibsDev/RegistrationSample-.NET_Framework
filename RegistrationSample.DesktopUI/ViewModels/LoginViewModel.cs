@@ -59,7 +59,7 @@ namespace RegistrationSample.DesktopUI.ViewModels
         private async Task LogIn()
         {
             var result = await _api.Authenticate(Username, Password);
-            MessageBox.Show($"Hello {result.Username}!");
+            MessageBox.Show($"Hello {result.userName}!");
         }
     }
 }

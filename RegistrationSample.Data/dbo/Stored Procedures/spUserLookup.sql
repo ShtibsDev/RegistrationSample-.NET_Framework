@@ -4,7 +4,7 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	SELECT FirstName,LastName,EmailAddress, BirthDate, LastLogin
+	SELECT Id, FirstName,LastName,EmailAddress, BirthDate, LastLogin
 	FROM dbo.Users
 	WHERE Id = @Id;
 END
