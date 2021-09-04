@@ -15,8 +15,11 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <util:BooleanToVisibilityInverseConverter x:Key="BoolToVisReversed"/>
 
-
-
+        <Style x:Key="Dark" TargetType="UserControl">
+            <Setter Property="Background" Value="#171717"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        
         <Style x:Key="btn" TargetType="Button">
             <Setter Property="FontFamily" Value="Helvetica Neue,Helvetica,Arial,sans-serif"/>
             <Setter Property="FontSize" Value="14"/>

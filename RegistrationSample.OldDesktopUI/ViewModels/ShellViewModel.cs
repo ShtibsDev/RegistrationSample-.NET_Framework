@@ -1,11 +1,6 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using System.ComponentModel;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using RegistrationSample.OldDesktopUI.Library.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RegistrationSample.OldDesktopUI.ViewModels
 {
