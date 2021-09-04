@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows7.0</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.20348.0</TargetFramework>
     <UseWPF>true</UseWPF>
+    <MinimumPlatformVersion>10.0.17763.0</MinimumPlatformVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +25,10 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
-﻿using RegistrationSample.DesktopUI.Models;
-using System.Threading.Tasks;
+﻿using RegistrationSample.DesktopUI.Library.Models;
 
-namespace RegistrationSample.DesktopUI.Helpers
+namespace RegistrationSample.DesktopUI.Library.API
 {
     public interface IApiHelper
     {

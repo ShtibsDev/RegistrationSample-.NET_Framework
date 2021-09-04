@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
@@ -11,12 +12,13 @@ namespace RegistrationSample.OldAPI.Controllers
     [RoutePrefix("api/User")]
     public class UserController : ApiController
     {
-        public List<UserModel> GetById()
+        [HttpGet]
+        public UserModel GetById()
         {
             var userId = RequestContext.Principal.Identity.GetUserId();
             UserData data = new UserData();
 
-            return data.GetUserById(userId);
+            return data.GetUserById(userId).First();
         }
     }
 }

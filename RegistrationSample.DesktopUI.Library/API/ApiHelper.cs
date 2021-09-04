@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using Microsoft.Extensions.Configuration;
-using RegistrationSample.DesktopUI.Models;
+using RegistrationSample.DesktopUI.Library.Models;
 
-namespace RegistrationSample.DesktopUI.Helpers
+namespace RegistrationSample.DesktopUI.Library.API
 {
     public class ApiHelper : IApiHelper
     {
