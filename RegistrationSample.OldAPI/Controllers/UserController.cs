@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -13,12 +14,40 @@ namespace RegistrationSample.OldAPI.Controllers
     public class UserController : ApiController
     {
         [HttpGet]
-        public UserModel GetById()
+        public IHttpActionResult GetUserById()
         {
-            var userId = RequestContext.Principal.Identity.GetUserId();
-            UserData data = new UserData();
+            try
+            {
+                var userId = RequestContext.Principal.Identity.GetUserId();
+                var data = new UserData();
+                return Ok(data.GetUserById(userId).First());
+            }
+            catch(Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
 
-            return data.GetUserById(userId).First();
+        [HttpPut]
+        public IHttpActionResult UpdateUser([FromBody]UserModel user)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var userId = RequestContext.Principal.Identity.GetUserId();
+                    var data = new UserData();
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
     }
 }

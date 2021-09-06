@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using RegistrationSample.OldDesktopUI.Library.API;
 using RegistrationSample.OldDesktopUI.Library.Models;
+using RegistrationSample.OldDesktopUI.Library.Utilities;
 using RegistrationSample.OldDesktopUI.Utility;
 using RegistrationSample.OldDesktopUI.ViewModels;
 using RegistrationSample.OldDesktopUI.Views;
@@ -55,8 +55,8 @@ namespace RegistrationSample.OldDesktopUI
                 Title = title,
                 DataContext = serviceProvider.GetRequiredService<ShellViewModel>(),
                 Content = serviceProvider.GetRequiredService<ShellView>(),
-                MinHeight = 400,
-                MinWidth = 400,
+                MinHeight = 450,
+                MinWidth = 450,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };

@@ -104,10 +104,15 @@
   <ItemGroup>
     <Compile Include="API\ApiHelper.cs" />
     <Compile Include="API\IApiHelper.cs" />
+    <Compile Include="EventModels\NavigationEvent.cs" />
+    <Compile Include="EventModels\UserChangedEvent.cs" />
     <Compile Include="Models\AuthenticatecUser.cs" />
     <Compile Include="Models\ILogedInUserModel.cs" />
     <Compile Include="Models\LogedInUserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\EventAggregator.cs" />
+    <Compile Include="Utilities\IEventAggregator.cs" />
+    <Compile Include="Utilities\ISubscriber.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

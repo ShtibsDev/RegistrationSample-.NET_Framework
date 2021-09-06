@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
-using RegistrationSample.OldDesktopUI.EventModels;
-using RegistrationSample.OldDesktopUI.Utility;
+using RegistrationSample.OldDesktopUI.Library.EventModels;
+using RegistrationSample.OldDesktopUI.Library.Utilities;
 
 namespace RegistrationSample.OldDesktopUI.ViewModels
 {

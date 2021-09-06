@@ -1,4 +1,4 @@
-﻿namespace RegistrationSample.OldDesktopUI.Utility
+﻿namespace RegistrationSample.OldDesktopUI.Library.Utilities
 {
     public interface ISubscriber<TEventType>
     {

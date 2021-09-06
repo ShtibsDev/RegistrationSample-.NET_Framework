@@ -10,7 +10,6 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
         <Menu DockPanel.Dock="Top" Background="#171717" Foreground="White">
-            <MenuItem Header="_File"/>
             <MenuItem Header="_Acount">
                 <MenuItem Header="Log In" Command="{Binding GoToLogInCmd}" Background="Black" BorderBrush="DarkGray" BorderThickness="0.5" Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BoolToVisReversed}}"/>
                 <MenuItem Header="{Binding LogedInUser.EmailAddress}" Background="Black" BorderBrush="DarkGray" Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BoolToVis}}"/>

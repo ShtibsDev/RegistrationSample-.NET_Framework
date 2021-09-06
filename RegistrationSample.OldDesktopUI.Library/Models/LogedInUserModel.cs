@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using RegistrationSample.OldDesktopUI.Library.EventModels;
+using RegistrationSample.OldDesktopUI.Library.Utilities;
 
 namespace RegistrationSample.OldDesktopUI.Library.Models
 {
@@ -12,6 +14,12 @@ namespace RegistrationSample.OldDesktopUI.Library.Models
         private string _emailAddress;
         private DateTime _birthDate;
         private DateTime _lastLogin;
+        private readonly IEventAggregator _eventAggregator;
+
+        public LogedInUserModel(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+        }
 
         public string Id
         {
@@ -47,6 +55,30 @@ namespace RegistrationSample.OldDesktopUI.Library.Models
         {
             get => _lastLogin;
             set => SetProperty(ref _lastLogin, value);
+        }
+
+        public void AssignUser(LogedInUserModel result)
+        {
+            Id = result.Id;
+            FirstName = result.FirstName;
+            LastName = result.LastName;
+            BirthDate = result.BirthDate;
+            EmailAddress = result.EmailAddress;
+            LastLogin = result.LastLogin;
+
+            BroadcastChange();
+        }
+        public void ResetUser()
+        {
+            foreach(var property in GetType().GetProperties())
+            {
+                property.SetValue(this, default);
+            }
+            BroadcastChange();
+        }
+        private void BroadcastChange()
+        {
+            _eventAggregator.PublishEvent(new UserChangedEvent());
         }
     }
 }

@@ -7,5 +7,6 @@ namespace RegistrationSample.OldDesktopUI.Utility
     {
         IViewModel CurrentViewModel { get; set; }
         IEnumerable<IViewModel> ViewModels { get; }
+        void Navigate<T>() where T : IViewModel;
     }
 }

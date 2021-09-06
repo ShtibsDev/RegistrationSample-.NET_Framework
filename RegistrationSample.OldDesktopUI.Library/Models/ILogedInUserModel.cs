@@ -12,5 +12,8 @@ namespace RegistrationSample.OldDesktopUI.Library.Models
         DateTime LastLogin { get; set; }
         string LastName { get; set; }
         string Token { get; set; }
+
+        void ResetUser();
+        void AssignUser(LogedInUserModel result);
     }
 }

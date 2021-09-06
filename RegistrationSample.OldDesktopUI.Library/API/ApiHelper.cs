@@ -64,12 +64,22 @@ namespace RegistrationSample.OldDesktopUI.Library.API
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsAsync<LogedInUserModel>();
-                    _logedInUser.Id = result.Id;
-                    _logedInUser.FirstName = result.FirstName;
-                    _logedInUser.LastName = result.LastName;
-                    _logedInUser.BirthDate = result.BirthDate;
-                    _logedInUser.EmailAddress = result.EmailAddress;
-                    _logedInUser.LastLogin = result.LastLogin;
+                    _logedInUser.AssignUser(result);
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task LogUserOut()
+        {
+            using (var response = await _apiClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, "api/Account/Logout")))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    _logedInUser.ResetUser();
                 }
                 else
                 {

@@ -203,19 +203,15 @@
     <Compile Include="CustomControls\TextBlock.xaml.cs">
       <DependentUpon>TextBlock.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EventModels\NavigationEvent.cs" />
-    <Compile Include="EventModels\UserLoggedInEvent.cs" />
     <Compile Include="Utility\BooleanToVisibilityInverseConverter.cs" />
-    <Compile Include="Utility\EventAggregator.cs" />
-    <Compile Include="Utility\IEventAggregator.cs" />
     <Compile Include="Utility\INavigation.cs" />
-    <Compile Include="Utility\ISubscriber.cs" />
     <Compile Include="Utility\Navigation.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\EntryViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="Views\EntryView.xaml.cs">
       <DependentUpon>EntryView.xaml</DependentUpon>
     </Compile>
@@ -224,6 +220,9 @@
     </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserView.xaml.cs">
+      <DependentUpon>UserView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -277,6 +276,10 @@
     <Page Include="Views\ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

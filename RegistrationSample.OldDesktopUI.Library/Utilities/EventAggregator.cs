@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace RegistrationSample.OldDesktopUI.Utility
+namespace RegistrationSample.OldDesktopUI.Library.Utilities
 {
     public class EventAggregator : IEventAggregator
     {
