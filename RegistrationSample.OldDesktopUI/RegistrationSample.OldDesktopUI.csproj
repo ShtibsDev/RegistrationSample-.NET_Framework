@@ -203,7 +203,14 @@
     <Compile Include="CustomControls\TextBlock.xaml.cs">
       <DependentUpon>TextBlock.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EventModels\NavigationEvent.cs" />
+    <Compile Include="EventModels\UserLoggedInEvent.cs" />
     <Compile Include="Utility\BooleanToVisibilityInverseConverter.cs" />
+    <Compile Include="Utility\EventAggregator.cs" />
+    <Compile Include="Utility\IEventAggregator.cs" />
+    <Compile Include="Utility\INavigation.cs" />
+    <Compile Include="Utility\ISubscriber.cs" />
+    <Compile Include="Utility\Navigation.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\EntryViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />

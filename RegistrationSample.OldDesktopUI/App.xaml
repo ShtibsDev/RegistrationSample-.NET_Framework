@@ -12,6 +12,10 @@
             <views:LoginView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vm:EntryViewModel}">
+            <views:EntryView/>
+        </DataTemplate>
+
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <util:BooleanToVisibilityInverseConverter x:Key="BoolToVisReversed"/>
 

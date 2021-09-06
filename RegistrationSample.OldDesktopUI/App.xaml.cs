@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RegistrationSample.OldDesktopUI.Library.API;
 using RegistrationSample.OldDesktopUI.Library.Models;
+using RegistrationSample.OldDesktopUI.Utility;
 using RegistrationSample.OldDesktopUI.ViewModels;
 using RegistrationSample.OldDesktopUI.Views;
 
@@ -14,61 +15,51 @@ namespace RegistrationSample.OldDesktopUI
     /// </summary>
     public partial class App : Application
     {
-        private readonly IHost _host;
+        private readonly IServiceProvider _services;
 
         public App()
         {
-            _host = CreateHostBuilder().Build();
+            _services = ConfigureServices();
         }
-
-        public IServiceProvider ServiceProvider { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            _host.StartAsync();
-
-            var shellWindow = _host.Services.GetRequiredService<Window>();
+            var shellWindow = _services.GetService<Window>();
             shellWindow.Show();
 
             base.OnStartup(e);
         }
 
-        static IHostBuilder CreateHostBuilder(string[] args = null)
+        private static IServiceProvider ConfigureServices()
         {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureServices(services =>
-                {
-                    services.AddSingleton<IApiHelper, ApiHelper>();
-                    services.AddSingleton<ILoggedInUserModel, LogedInUserModel>();
-                    services.AddScoped<ShellViewModel>();
-                    services.AddScoped<LoginViewModel>();
-                    services.AddScoped<ShellView>();
-                    services.AddSingleton(s =>
-                        GetShellWindow("Registration Sample", s.GetRequiredService<ShellViewModel>(), s.GetRequiredService<ShellView>()));
-                });
+            var services = new ServiceCollection();
 
+            services.AddSingleton<IServiceCollection, ServiceCollection>();
+            services.AddSingleton<IApiHelper, ApiHelper>();
+            services.AddSingleton<ILoggedInUserModel, LogedInUserModel>();
+            services.AddSingleton<IEventAggregator, EventAggregator>();
+            services.AddSingleton<INavigation, Navigation>();
+            services.AddTransient<ShellViewModel>();
+            services.AddScoped<IViewModel, EntryViewModel>();
+            services.AddScoped<IViewModel, LoginViewModel>();
+            services.AddScoped<ShellView>();
+            services.AddSingleton(s => GetShellWindow("Registration Sample", s));
+
+            return services.BuildServiceProvider();
         }
 
-        private static Window GetShellWindow<T, V>(string title, T dataContext, V content)
+        private static Window GetShellWindow(string title, IServiceProvider serviceProvider)
         {
             return new Window
             {
                 Title = title,
-                DataContext = dataContext,
-                Content = content,
+                DataContext = serviceProvider.GetRequiredService<ShellViewModel>(),
+                Content = serviceProvider.GetRequiredService<ShellView>(),
                 MinHeight = 400,
                 MinWidth = 400,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
-        }
-
-        protected override async void OnExit(ExitEventArgs e)
-        {
-            await _host.StopAsync();
-            _host.Dispose();
-
-            base.OnExit(e);
         }
     }
 }

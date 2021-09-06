@@ -118,8 +118,8 @@ csharp_style_prefer_index_operator = true
 csharp_style_prefer_null_check_over_type_check = true
 csharp_style_prefer_range_operator = true
 csharp_style_throw_expression = true
-csharp_style_unused_value_assignment_preference = discard_variable
-csharp_style_unused_value_expression_statement_preference = discard_variable
+csharp_style_unused_value_assignment_preference = unused_local_variable
+csharp_style_unused_value_expression_statement_preference = unused_local_variable
 
 # 'using' directive preferences
 csharp_using_directive_placement = outside_namespace
@@ -230,3 +230,6 @@ dotnet_naming_style.underscore_camel_case.required_prefix = _
 dotnet_naming_style.underscore_camel_case.required_suffix = 
 dotnet_naming_style.underscore_camel_case.word_separator = 
 dotnet_naming_style.underscore_camel_case.capitalization = camel_case
+
+# IDE0058: Expression value is never used
+dotnet_diagnostic.IDE0058.severity = none

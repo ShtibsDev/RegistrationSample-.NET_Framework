@@ -1,41 +1,42 @@
-﻿using System.ComponentModel;
+﻿using System.Linq;
+using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
+using RegistrationSample.OldDesktopUI.EventModels;
 using RegistrationSample.OldDesktopUI.Library.Models;
+using RegistrationSample.OldDesktopUI.Utility;
 
 namespace RegistrationSample.OldDesktopUI.ViewModels
 {
-    public class ShellViewModel : ObservableObject, IViewModel
+    public class ShellViewModel : ObservableObject, ISubscriber<UserLoggedInEvent>
     {
-        private IViewModel _currentView;
         private ILoggedInUserModel _loggedInUser;
+        private readonly IEventAggregator _eventAggregator;
 
-        public ShellViewModel(LoginViewModel loginViewModel, ILoggedInUserModel logedInUser)
+        public ShellViewModel(ILoggedInUserModel logedInUser, IEventAggregator eventAggregator, INavigation navigation)
         {
-            _currentView = loginViewModel;
             _loggedInUser = logedInUser;
-            _loggedInUser.PropertyChanged += LoggedInUserCanaged;
+            _eventAggregator = eventAggregator;
+            _eventAggregator.SubsribeEvent(this);
+            Navigation = navigation;
+            _eventAggregator.PublishEvent(new NavigationEvent(typeof(EntryViewModel)));
+            GoToLogInCmd = new RelayCommand(() => _eventAggregator.PublishEvent(new NavigationEvent(typeof(LoginViewModel))));
+            LogOutCmd = new RelayCommand(() => _eventAggregator.PublishEvent(new NavigationEvent(typeof(EntryViewModel))));
         }
 
-        private void LoggedInUserCanaged(object sender, PropertyChangedEventArgs e)
+        public void OnEventHandler(UserLoggedInEvent e)
         {
             OnPropertyChanged(nameof(IsUserLoggedIn));
         }
 
-        public IViewModel CurrentViewModel
-        {
-            get => _currentView;
-            set => SetProperty(ref _currentView, value);
-        }
+        public ICommand GoToLogInCmd { get; }
+        public ICommand LogOutCmd { get; }
+        public INavigation Navigation { get; }
         public ILoggedInUserModel LogedInUser
         {
             get => _loggedInUser;
             set => SetProperty(ref _loggedInUser, value);
         }
-        public bool IsUserLoggedIn
-        {
-            get => !string.IsNullOrEmpty(LogedInUser.Id);
-        }
-
-        public string Name { get; set; }
+        public bool IsUserLoggedIn => !string.IsNullOrEmpty(LogedInUser.Id);
     }
 }

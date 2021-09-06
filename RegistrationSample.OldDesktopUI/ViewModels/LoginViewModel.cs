@@ -4,8 +4,10 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using RegistrationSample.OldDesktopUI.EventModels;
 using RegistrationSample.OldDesktopUI.Library.API;
 using RegistrationSample.OldDesktopUI.Library.Models;
+using RegistrationSample.OldDesktopUI.Utility;
 
 namespace RegistrationSample.OldDesktopUI.ViewModels
 {
@@ -13,14 +15,16 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
     {
         private readonly IApiHelper _api;
         private ILoggedInUserModel _loggedInUser;
+        private IEventAggregator _eventAggregator;
 
         private string _username;
         private string _password;
 
-        public LoginViewModel(IApiHelper api, ILoggedInUserModel logedInUser)
+        public LoginViewModel(IApiHelper api, ILoggedInUserModel logedInUser, IEventAggregator eventAggregator)
         {
             _api = api;
             _loggedInUser = logedInUser;
+            _eventAggregator = eventAggregator;
             LogInCmd = new AsyncRelayCommand(LogIn);
             (LogInCmd as AsyncRelayCommand).PropertyChanged += LogInCmd_CanExecuteChanged;
         }
@@ -78,6 +82,7 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
 
             await _api.GetLogedInUserInfo();
 
+            _eventAggregator.PublishEvent(new UserLoggedInEvent());
             MessageBox.Show($"Hello {_loggedInUser.FirstName} {_loggedInUser.LastName}!");
         }
     }

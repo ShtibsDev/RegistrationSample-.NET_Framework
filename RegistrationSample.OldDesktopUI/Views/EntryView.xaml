@@ -9,17 +9,17 @@
              d:DataContext="{d:DesignInstance Type={x:Type vm:EntryViewModel}}"
              d:Style="{StaticResource Dark}">
              
-    <Grid>
+    <Grid VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <cc:TextBlock FontSize="36" HorizontalAlignment="Center" Content="Registration Sample" Grid.ColumnSpan="2"/>
-        <Button Content="Log In" Margin="20" Style="{StaticResource btn-primary}" Grid.Row="1"/>
+        <Button Content="Log In" Command="{Binding GoToLogInCmd}" Margin="20" Style="{StaticResource btn-primary}" Grid.Row="1"/>
         <Button Content="Register" Margin="20" Grid.Row="1" Style="{StaticResource btn-info}" Grid.Column="1"/>
     </Grid>
 </UserControl>
