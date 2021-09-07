@@ -11,81 +11,19 @@ namespace RegistrationSample.OldDesktopUI.Library.API
 {
     public class ApiHelper : IApiHelper
     {
-        private HttpClient _apiClient;
-        private ILoggedInUserModel _logedInUser;
-
-        public ApiHelper(ILoggedInUserModel logedInUser)
+        public ApiHelper()
         {
             InitializeClient();
-            _logedInUser = logedInUser; 
         }
+
+        public HttpClient ApiClient { get; private set; }
 
         private void InitializeClient()
         {
             var apiUri = ConfigurationManager.AppSettings["API"];
-            _apiClient = new HttpClient { BaseAddress = new Uri(apiUri) };
-            _apiClient.DefaultRequestHeaders.Accept.Clear();
-            _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        }
-
-        public async Task<AuthenticatedUser> Authenticate(string username, string password)
-        {
-            var data = new FormUrlEncodedContent(new[]
-            {
-                new KeyValuePair<string, string> ("grant_type", "password"),
-                new KeyValuePair<string, string> ("username", username),
-                new KeyValuePair<string, string> ("password", password)
-            });
-
-            using (var response = await _apiClient.PostAsync("/Token", data))
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
-                    _logedInUser.Token = result.Access_token;
-                    return result;
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
-            }
-        }
-
-        public async Task GetLogedInUserInfo()
-        {
-            _apiClient.DefaultRequestHeaders.Clear();
-            _apiClient.DefaultRequestHeaders.Accept.Clear();
-            _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_logedInUser.Token}");
-
-            using (var response = await _apiClient.GetAsync("api/User"))
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadAsAsync<LogedInUserModel>();
-                    _logedInUser.AssignUser(result);
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
-            }
-        }
-
-        public async Task LogUserOut()
-        {
-            using (var response = await _apiClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, "api/Account/Logout")))
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    _logedInUser.ResetUser();
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
-            }
+            ApiClient = new HttpClient { BaseAddress = new Uri(apiUri) };
+            ApiClient.DefaultRequestHeaders.Accept.Clear();
+            ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
     }
 }

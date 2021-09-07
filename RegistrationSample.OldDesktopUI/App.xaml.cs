@@ -37,8 +37,8 @@ namespace RegistrationSample.OldDesktopUI
             var services = new ServiceCollection();
 
             services.AddSingleton(sp => sp);
-            services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IApiHelper, ApiHelper>();
+            services.AddSingleton<IUserEndpoint, UserEndpoint>();
             services.AddSingleton<ILoggedInUserModel, LogedInUserModel>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
             services.AddSingleton<IShellViewModel, ShellViewModel>();

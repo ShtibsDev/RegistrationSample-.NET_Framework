@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using RegistrationSample.OldDesktopUI.Library.API;
 using RegistrationSample.OldDesktopUI.Library.Utilities;
-using RegistrationSample.OldDesktopUI.Utility;
 
 namespace RegistrationSample.OldDesktopUI.ViewModels
 {
@@ -14,11 +12,11 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
         private string _username;
         private string _password;
         private string _errorMessage;
-        private readonly IApiHelper _api;
+        private readonly IUserEndpoint _userEndpoint;
 
-        public LoginViewModel(IApiHelper api, IEventAggregator eventAggregator) : base(eventAggregator)
+        public LoginViewModel(IUserEndpoint userEndpoint, IEventAggregator eventAggregator) : base(eventAggregator)
         {
-            _api = api;
+            _userEndpoint = userEndpoint;
             LogInCmd = new AsyncRelayCommand(LogIn);
         }
 
@@ -62,8 +60,8 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
         {
             try
             {
-                var result = await _api.Authenticate(Username, Password);
-                await _api.GetLogedInUserInfo();
+                var result = await _userEndpoint.Authenticate(Username, Password);
+                await _userEndpoint.GetLogedInUserInfo();
                 Navigate<UserViewModel>();
             }
             catch (Exception ex)
