@@ -3,10 +3,8 @@ using RegistrationSample.OldDesktopUI.ViewModels;
 
 namespace RegistrationSample.OldDesktopUI.Utility
 {
-    public interface INavigation
+    public interface INavigationService
     {
-        IViewModel CurrentViewModel { get; set; }
-        IEnumerable<IViewModel> ViewModels { get; }
         void Navigate<T>() where T : IViewModel;
     }
 }

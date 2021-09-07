@@ -1,7 +1,9 @@
-﻿namespace RegistrationSample.OldDesktopUI.Library.Utilities
+﻿using RegistrationSample.OldDesktopUI.Library.EventModels;
+
+namespace RegistrationSample.OldDesktopUI.Library.Utilities
 {
-    public interface ISubscriber<TEventType>
+    public interface ISubscriber<T> where T : IEventModel
     {
-        void OnEventHandler(TEventType e);
+        void OnEventHandler(T e);
     }
 }

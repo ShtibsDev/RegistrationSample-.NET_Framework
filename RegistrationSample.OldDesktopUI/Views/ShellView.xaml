@@ -17,7 +17,7 @@
             </MenuItem>
         </Menu>
         <Grid>
-            <ContentControl Content="{Binding Navigation.CurrentViewModel}" Margin="20"/>
+            <ContentControl Content="{Binding CurrentViewModel}" Margin="20"/>
         </Grid>
     </DockPanel>
 </UserControl>

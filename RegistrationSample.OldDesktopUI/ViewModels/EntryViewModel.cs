@@ -6,18 +6,14 @@ using RegistrationSample.OldDesktopUI.Library.Utilities;
 
 namespace RegistrationSample.OldDesktopUI.ViewModels
 {
-    public class EntryViewModel : ObservableObject, IViewModel
+    public class EntryViewModel : BaseViewModel
     {
-        private readonly IEventAggregator _eventAggregator;
-        public EntryViewModel(IEventAggregator eventAggregator)
+        public EntryViewModel(IEventAggregator eventAggregator) : base(eventAggregator)
         {
-            _eventAggregator = eventAggregator;
-            GoToLogInCmd = new RelayCommand(() => _eventAggregator.PublishEvent(new NavigationEvent(typeof(LoginViewModel))));
+            GoToLogInCmd = new RelayCommand(Navigate<LoginViewModel>);
         }
 
         public ICommand GoToLogInCmd { get; }
         public ICommand GoToRegistrationCmd { get; }
-        public string Name { get; set; }
-
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RegistrationSample.OldDesktopUI.Library.EventModels
 {
-    public class NavigationEvent
+    public class NavigationEvent : IEventModel
     {
         public Type ViewModelType { get; }
 

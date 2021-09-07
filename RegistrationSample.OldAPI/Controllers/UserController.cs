@@ -29,7 +29,7 @@ namespace RegistrationSample.OldAPI.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult UpdateUser([FromBody]UserModel user)
+        public IHttpActionResult UpdateUser([FromBody] UserModel user)
         {
             try
             {

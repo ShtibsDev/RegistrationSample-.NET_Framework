@@ -11,9 +11,11 @@
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <views:LoginView/>
         </DataTemplate>
-
         <DataTemplate DataType="{x:Type vm:EntryViewModel}">
             <views:EntryView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UserViewModel}">
+            <views:UserView/>
         </DataTemplate>
 
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>

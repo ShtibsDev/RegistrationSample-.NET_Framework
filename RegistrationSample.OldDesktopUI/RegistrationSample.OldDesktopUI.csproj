@@ -204,10 +204,11 @@
       <DependentUpon>TextBlock.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utility\BooleanToVisibilityInverseConverter.cs" />
-    <Compile Include="Utility\INavigation.cs" />
-    <Compile Include="Utility\Navigation.cs" />
+    <Compile Include="Utility\INavigationService.cs" />
+    <Compile Include="Utility\NavigationService.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\EntryViewModel.cs" />
+    <Compile Include="ViewModels\IShellViewModel.cs" />
     <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />

@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="API\ApiHelper.cs" />
     <Compile Include="API\IApiHelper.cs" />
+    <Compile Include="EventModels\IEventModel.cs" />
     <Compile Include="EventModels\NavigationEvent.cs" />
     <Compile Include="EventModels\UserChangedEvent.cs" />
     <Compile Include="Models\AuthenticatecUser.cs" />

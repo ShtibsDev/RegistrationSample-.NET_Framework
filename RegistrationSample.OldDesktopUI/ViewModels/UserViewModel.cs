@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
-using RegistrationSample.OldDesktopUI.Library.Models;
+﻿using RegistrationSample.OldDesktopUI.Library.Models;
+using RegistrationSample.OldDesktopUI.Library.Utilities;
 
 namespace RegistrationSample.OldDesktopUI.ViewModels
 {
-    public class UserViewModel : ObservableObject, IViewModel
+    public class UserViewModel : BaseViewModel
     {
-        public UserViewModel(ILoggedInUserModel loggedInUser)
+        public UserViewModel(ILoggedInUserModel loggedInUser, IEventAggregator eventAggregator) : base(eventAggregator)
         {
             User = loggedInUser;
         }
-        public ILoggedInUserModel User{ get; }
-        public string Name { get; set; }
+        public ILoggedInUserModel User { get; }
     }
 }

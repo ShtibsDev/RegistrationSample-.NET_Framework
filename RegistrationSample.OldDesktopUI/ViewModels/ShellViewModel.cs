@@ -1,51 +1,86 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using RegistrationSample.OldDesktopUI.Library.API;
 using RegistrationSample.OldDesktopUI.Library.EventModels;
 using RegistrationSample.OldDesktopUI.Library.Models;
 using RegistrationSample.OldDesktopUI.Library.Utilities;
-using RegistrationSample.OldDesktopUI.Utility;
 
 namespace RegistrationSample.OldDesktopUI.ViewModels
 {
-    public class ShellViewModel : ObservableObject, ISubscriber<UserChangedEvent>
+    public class ShellViewModel : ObservableObject, ISubscriber<UserChangedEvent>, ISubscriber<NavigationEvent>, IShellViewModel
     {
-        private ILoggedInUserModel _loggedInUser;
+        private IViewModel _currentViewModel;
         private readonly IEventAggregator _eventAggregator;
         private readonly IApiHelper _api;
-        public ShellViewModel(ILoggedInUserModel logedInUser, IEventAggregator eventAggregator, INavigation navigation, IApiHelper api)
+        private readonly IServiceProvider _service;
+
+        public ShellViewModel(ILoggedInUserModel logedInUser,
+                              IEventAggregator eventAggregator,
+                              IEnumerable<IViewModel> viewModels,
+                              IApiHelper api,
+                              IServiceProvider service)
         {
-            _loggedInUser = logedInUser;
             _eventAggregator = eventAggregator;
             _eventAggregator.SubsribeEvent(this);
-            Navigation = navigation;
+            ViewModels = viewModels;
             _api = api;
-            _eventAggregator.PublishEvent(new NavigationEvent(typeof(EntryViewModel)));
-            GoToLogInCmd = new RelayCommand(() => Navigation.Navigate<LoginViewModel>());
+            _service = service;
+            LogedInUser = logedInUser;
+            CurrentViewModel = ViewModels.First(vm => vm is EntryViewModel);
+            GoToLogInCmd = new RelayCommand(Navigate<LoginViewModel>);
             LogOutCmd = new AsyncRelayCommand(LogOut);
         }
 
         public ICommand GoToLogInCmd { get; }
         public ICommand LogOutCmd { get; }
-        public INavigation Navigation { get; }
-        public ILoggedInUserModel LogedInUser
+        public ILoggedInUserModel LogedInUser{get;}
+        public bool IsUserLoggedIn => !(LogedInUser.Token is null);
+        public IViewModel CurrentViewModel
         {
-            get => _loggedInUser;
-            set => SetProperty(ref _loggedInUser, value);
+            get => _currentViewModel;
+            set => SetProperty(ref _currentViewModel, value);
         }
-        public bool IsUserLoggedIn => !string.IsNullOrEmpty(LogedInUser.Id);
+        public IEnumerable<IViewModel> ViewModels { get; }
 
         public void OnEventHandler(UserChangedEvent e)
         {
             OnPropertyChanged(nameof(IsUserLoggedIn));
         }
+        public void OnEventHandler(NavigationEvent e)
+        {
+            Navigate(e.ViewModelType);
+        }
         private async Task LogOut()
         {
             await _api.LogUserOut();
-            Navigation.Navigate<EntryViewModel>();
+            Navigate<EntryViewModel>();
+        }
+
+        private void Navigate<T>() where T : IViewModel
+        {
+            Navigate(typeof(T));
+        }
+        private void Navigate(Type viewModelType)
+        {
+            if (!typeof(IViewModel).IsAssignableFrom(viewModelType))
+            {
+                throw new ArgumentException("Provided type is not a ViewModel", nameof(viewModelType));
+            }
+
+            if (viewModelType == typeof(LoginViewModel))
+            {
+                CurrentViewModel = _service.GetService<LoginViewModel>();
+            }
+            else
+            {
+                CurrentViewModel = ViewModels.First(vm => vm.GetType() == viewModelType);
+            }
         }
     }
 }
