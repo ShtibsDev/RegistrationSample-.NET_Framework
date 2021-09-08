@@ -31,18 +31,17 @@ namespace RegistrationSample.OldDesktopUI
 
             base.OnStartup(e);
         }
-
         private IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection();
 
             services.AddSingleton(sp => sp);
             services.AddSingleton<IApiHelper, ApiHelper>();
-            services.AddSingleton<IUserEndpoint, UserEndpoint>();
             services.AddSingleton<ILoggedInUserModel, LogedInUserModel>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
             services.AddSingleton<IShellViewModel, ShellViewModel>();
             services.AddScoped<IViewModel, EntryViewModel>();
+            services.AddTransient<IUserEndpoint, UserEndpoint>();
             services.AddTransient<LoginViewModel>();
             services.AddTransient<IViewModel, UserViewModel>();
             services.AddScoped<ShellView>();
@@ -50,16 +49,6 @@ namespace RegistrationSample.OldDesktopUI
 
             return services.BuildServiceProvider();
         }
-        //private void ConfigureNavigationService()
-        //{
-        //    var viewModels = _services.GetServices<IViewModel>();
-        //    var eventAggregator = _services.GetService<IEventAggregator>();
-        //    var navigation = new Navigation(viewModels, eventAggregator);
-
-
-
-
-        //}
         private static Window GetShellWindow(string title, IServiceProvider serviceProvider)
         {
             return new Window

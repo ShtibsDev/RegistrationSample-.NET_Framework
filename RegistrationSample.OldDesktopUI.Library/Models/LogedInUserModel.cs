@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using RegistrationSample.OldDesktopUI.Library.EventModels;
 using RegistrationSample.OldDesktopUI.Library.Utilities;
@@ -57,14 +58,14 @@ namespace RegistrationSample.OldDesktopUI.Library.Models
             set => SetProperty(ref _lastLogin, value);
         }
 
-        public void AssignUser(LogedInUserModel result)
+        public void AssignUser(ILoggedInUserModel user)
         {
-            Id = result.Id;
-            FirstName = result.FirstName;
-            LastName = result.LastName;
-            BirthDate = result.BirthDate;
-            EmailAddress = result.EmailAddress;
-            LastLogin = result.LastLogin;
+            Id = user.Id;
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            BirthDate = user.BirthDate;
+            EmailAddress = user.EmailAddress;
+            LastLogin = user.LastLogin;
 
             BroadcastChange();
         }
@@ -79,6 +80,13 @@ namespace RegistrationSample.OldDesktopUI.Library.Models
         private void BroadcastChange()
         {
             _eventAggregator.PublishEvent(new UserChangedEvent());
+        }
+
+        public ILoggedInUserModel Clone()
+        {
+            var user = new LogedInUserModel(_eventAggregator);
+            user.AssignUser(this);
+            return user;
         }
     }
 }

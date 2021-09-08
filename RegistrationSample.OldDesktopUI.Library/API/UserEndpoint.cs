@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using RegistrationSample.OldDesktopUI.Library.Models;
 
@@ -35,6 +35,7 @@ namespace RegistrationSample.OldDesktopUI.Library.API
                 {
                     var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
                     _loggedInUser.Token = result.Access_token;
+                    SetAuthenticationHeaders();
                     return result;
                 }
                 else
@@ -45,11 +46,6 @@ namespace RegistrationSample.OldDesktopUI.Library.API
         }
         public async Task GetLogedInUserInfo()
         {
-            _apiHelper.ApiClient.DefaultRequestHeaders.Clear();
-            _apiHelper.ApiClient.DefaultRequestHeaders.Accept.Clear();
-            _apiHelper.ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _apiHelper.ApiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_loggedInUser.Token}");
-
             using (var response = await _apiHelper.ApiClient.GetAsync("api/User"))
             {
                 if (response.IsSuccessStatusCode)
@@ -58,6 +54,18 @@ namespace RegistrationSample.OldDesktopUI.Library.API
                     _loggedInUser.AssignUser(result);
                 }
                 else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+        public async Task Update()
+        {
+            var content = JsonSerializer.Serialize(_loggedInUser);
+            var request = new HttpRequestMessage { Method = HttpMethod.Put, RequestUri = new Uri("api/User"), Content = new StringContent(content) };
+            using (var response = await _apiHelper.ApiClient.SendAsync(request))
+            {
+                if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception(response.ReasonPhrase);
                 }
@@ -76,6 +84,14 @@ namespace RegistrationSample.OldDesktopUI.Library.API
                     throw new Exception(response.ReasonPhrase);
                 }
             }
+        }
+
+        private void SetAuthenticationHeaders()
+        {
+            _apiHelper.ApiClient.DefaultRequestHeaders.Clear();
+            _apiHelper.ApiClient.DefaultRequestHeaders.Accept.Clear();
+            _apiHelper.ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _apiHelper.ApiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_loggedInUser.Token}");
         }
     }
 }

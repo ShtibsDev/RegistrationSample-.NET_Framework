@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace RegistrationSample.OldDesktopUI.Library.Models
 {
@@ -13,7 +14,8 @@ namespace RegistrationSample.OldDesktopUI.Library.Models
         string LastName { get; set; }
         string Token { get; set; }
 
+        void AssignUser(ILoggedInUserModel user);
+        ILoggedInUserModel Clone();
         void ResetUser();
-        void AssignUser(LogedInUserModel result);
     }
 }

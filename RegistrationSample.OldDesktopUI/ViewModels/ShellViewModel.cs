@@ -17,19 +17,19 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
     {
         private IViewModel _currentViewModel;
         private readonly IEventAggregator _eventAggregator;
-        private readonly IApiHelper _api;
+        private readonly IUserEndpoint _userEndpoint;
         private readonly IServiceProvider _service;
 
         public ShellViewModel(ILoggedInUserModel logedInUser,
                               IEventAggregator eventAggregator,
                               IEnumerable<IViewModel> viewModels,
-                              IApiHelper api,
+                              IUserEndpoint userEndpoint,
                               IServiceProvider service)
         {
             _eventAggregator = eventAggregator;
             _eventAggregator.SubsribeEvent(this);
             ViewModels = viewModels;
-            _api = api;
+            _userEndpoint = userEndpoint;
             _service = service;
             LogedInUser = logedInUser;
             CurrentViewModel = ViewModels.First(vm => vm is EntryViewModel);
@@ -58,7 +58,7 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
         }
         private async Task LogOut()
         {
-            await _api.LogUserOut();
+            await _userEndpoint.LogUserOut();
             Navigate<EntryViewModel>();
         }
 
