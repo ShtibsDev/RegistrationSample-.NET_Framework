@@ -61,9 +61,7 @@ namespace RegistrationSample.OldDesktopUI.Library.API
         }
         public async Task Update()
         {
-            var content = JsonSerializer.Serialize(_loggedInUser);
-            var request = new HttpRequestMessage { Method = HttpMethod.Put, RequestUri = new Uri("api/User"), Content = new StringContent(content) };
-            using (var response = await _apiHelper.ApiClient.SendAsync(request))
+            using (var response = await _apiHelper.ApiClient.PostAsJsonAsync("api/User", _loggedInUser))
             {
                 if (!response.IsSuccessStatusCode)
                 {

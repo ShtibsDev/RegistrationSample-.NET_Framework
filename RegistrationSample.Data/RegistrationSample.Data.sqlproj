@@ -69,4 +69,7 @@
   <ItemGroup>
     <None Include="PublishLocations\RegistrationSample.Data.publish.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="PublishLocations\RegistrationSample.Data.publish.xml" />
+  </ItemGroup>
 </Project>
