@@ -22,7 +22,7 @@ namespace RegistrationSample.OldAPI.Controllers
                 var data = new UserData();
                 return Ok(data.GetUserById(userId).First());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return InternalServerError(ex);
             }
@@ -37,6 +37,7 @@ namespace RegistrationSample.OldAPI.Controllers
                 {
                     var userId = RequestContext.Principal.Identity.GetUserId();
                     var data = new UserData();
+                    data.UpdateUser(user);
                     return Ok();
                 }
                 else
