@@ -59,9 +59,13 @@
     <Folder Include="dbo" />
     <Folder Include="dbo\Tables" />
     <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="PublishLocations" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Users.sql" />
     <Build Include="dbo\Stored Procedures\spUserLookup.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PublishLocations\RegistrationSample.Data.publish.xml" />
   </ItemGroup>
 </Project>
