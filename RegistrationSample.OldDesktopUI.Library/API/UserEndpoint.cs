@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Threading.Tasks;
 using RegistrationSample.OldDesktopUI.Library.Models;
 
@@ -12,12 +10,12 @@ namespace RegistrationSample.OldDesktopUI.Library.API
     public class UserEndpoint : IUserEndpoint
     {
         private readonly IApiHelper _apiHelper;
-        private readonly ILoggedInUserModel _loggedInUser;
+        private readonly AuthenticatedUser _authenticatedUser;
 
-        public UserEndpoint(IApiHelper apiHelper, ILoggedInUserModel loggedInUser)
+        public UserEndpoint(IApiHelper apiHelper, AuthenticatedUser authenticatedUser)
         {
             _apiHelper = apiHelper;
-            _loggedInUser = loggedInUser;
+            _authenticatedUser = authenticatedUser;
         }
 
         public async Task<AuthenticatedUser> Authenticate(string username, string password)
@@ -34,7 +32,7 @@ namespace RegistrationSample.OldDesktopUI.Library.API
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
-                    _loggedInUser.Token = result.Access_token;
+                    _authenticatedUser.Access_token = result.Access_token;
                     SetAuthenticationHeaders();
                     return result;
                 }
@@ -44,14 +42,14 @@ namespace RegistrationSample.OldDesktopUI.Library.API
                 }
             }
         }
-        public async Task GetLogedInUserInfo()
+        public async Task<LoggedInUserModel> GetLogedInUserInfo()
         {
             using (var response = await _apiHelper.ApiClient.GetAsync("api/User"))
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadAsAsync<LogedInUserModel>();
-                    _loggedInUser.AssignUser(result);
+                    var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
+                    return result;
                 }
                 else
                 {
@@ -59,9 +57,48 @@ namespace RegistrationSample.OldDesktopUI.Library.API
                 }
             }
         }
-        public async Task Update()
+        public async Task<LoggedInUserModel> RegisterUser(NewUserModel newUser)
         {
-            using (var response = await _apiHelper.ApiClient.PostAsJsonAsync("api/User", _loggedInUser))
+            var regestrationUser = new { Email = newUser.EmailAddress, newUser.Password, newUser.ConfirmPassword };
+
+            using (var response = await _apiHelper.ApiClient.PostAsJsonAsync(" api/Account/Register", regestrationUser))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+
+            var authenticatedUser = await Authenticate(newUser.EmailAddress, newUser.Password);
+
+            if (authenticatedUser is null)
+            {
+                throw new Exception("Authentication Faild");
+            }
+
+            var userDetails = new LoggedInUserModel
+            {
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
+                EmailAddress = newUser.EmailAddress,
+                BirthDate = newUser.BirthDate
+            };
+
+            using (var response = await _apiHelper.ApiClient.PostAsJsonAsync(" api/Account/Register", userDetails))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    return await GetLogedInUserInfo();
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+        public async Task Update(LoggedInUserModel user)
+        {
+            using (var response = await _apiHelper.ApiClient.PutAsJsonAsync("api/User/", user))
             {
                 if (!response.IsSuccessStatusCode)
                 {
@@ -71,13 +108,9 @@ namespace RegistrationSample.OldDesktopUI.Library.API
         }
         public async Task LogUserOut()
         {
-            using (var response = await _apiHelper.ApiClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, "api/Account/Logout")))
+            using (var response = await _apiHelper.ApiClient.PostAsync("api/Account/Logout", null))
             {
-                if (response.IsSuccessStatusCode)
-                {
-                    _loggedInUser.ResetUser();
-                }
-                else
+                if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception(response.ReasonPhrase);
                 }
@@ -89,7 +122,7 @@ namespace RegistrationSample.OldDesktopUI.Library.API
             _apiHelper.ApiClient.DefaultRequestHeaders.Clear();
             _apiHelper.ApiClient.DefaultRequestHeaders.Accept.Clear();
             _apiHelper.ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _apiHelper.ApiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_loggedInUser.Token}");
+            _apiHelper.ApiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_authenticatedUser.Access_token}");
         }
     }
 }

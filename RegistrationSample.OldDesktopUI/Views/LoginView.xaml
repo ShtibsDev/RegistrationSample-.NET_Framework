@@ -39,9 +39,9 @@
         <cc:TextBlock Content="Password:" Grid.Row="4"/>
         <cc:PasswordBox Password="{Binding Password, UpdateSourceTrigger=PropertyChanged}" Width="200" Grid.Column="1" Grid.Row="4"/>
 
-        <TextBlock Text="{Binding ErrorMessage}" Foreground="red" TextAlignment="Center" Margin="0,0,0,5" Grid.ColumnSpan="2" Grid.Row="6"/>
+        <TextBlock Text="{Binding ErrorMessage}" Foreground="red" TextAlignment="Center" Margin="0,0,0,10" Grid.ColumnSpan="2" Grid.Row="6"/>
 
-        <Button Content="Log In" Command="{Binding LogInCmd}" IsEnabled="{Binding CanLogIn}" Style="{StaticResource btn-primary}" Grid.Row="7" Grid.ColumnSpan="2" Padding="10" Margin="40, 0" />
+        <Button Content="Log In" Command="{Binding LogInCmd}" Style="{StaticResource btn-primary}" Grid.Row="7" Grid.ColumnSpan="2" Padding="10" Margin="40, 0" />
     </Grid>
 
 </UserControl>

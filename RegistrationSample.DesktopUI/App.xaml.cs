@@ -1,14 +1,12 @@
-﻿using RegistrationSample.DesktopUI.Views;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
-using RegistrationSample.DesktopUI.Helpers;
+using RegistrationSample.DesktopUI.Library.API;
+using RegistrationSample.DesktopUI.Library.Models;
+using RegistrationSample.DesktopUI.Library.Utilities;
 using RegistrationSample.DesktopUI.ViewModels;
-using System.Configuration;
-using System;
-using System.IO;
+using RegistrationSample.DesktopUI.Views;
+using RegistrationSample.OldDesktopUI.Library.Utilities;
 
 namespace RegistrationSample.DesktopUI
 {
@@ -17,76 +15,50 @@ namespace RegistrationSample.DesktopUI
     /// </summary>
     public partial class App : Application
     {
-        private readonly IHost _host;
+        private readonly IServiceProvider _services;
 
         public App()
         {
-            Configuration = BuildConfig().Build();
-            _host = CreateHostBuilder().Build();
+            _services = ConfigureServices();
         }
-
-        public IServiceProvider ServiceProvider { get; private set; }
-        public static IConfiguration Configuration { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            _host.StartAsync();
-
-            var shellWindow = _host.Services.GetRequiredService<Window>();
+            var shellWindow = _services.GetService<Window>();
             shellWindow.Show();
 
             base.OnStartup(e);
         }
-
-        static IHostBuilder CreateHostBuilder(string[] args = null)
+        private IServiceProvider ConfigureServices()
         {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(config =>
-                {
-                    config.AddJsonFile("appsettings.json");
-                    config.AddEnvironmentVariables();
-                })
-                .ConfigureServices(services =>
-                {
-                    services.AddSingleton(Configuration);
-                    services.AddSingleton<IApiHelper, ApiHelper>();
-                    services.AddScoped<ShellViewModel>();
-                    services.AddScoped<LoginViewModel>();
-                    services.AddScoped<ShellView>();
-                    services.AddSingleton(s =>
-                        GetShellWindow("Registration Sample", s.GetRequiredService<ShellViewModel>(), s.GetRequiredService<ShellView>()));
-                });
+            var services = new ServiceCollection();
 
+            services.AddSingleton(sp => sp);
+            services.AddSingleton<IApiHelper, ApiHelper>();
+            services.AddSingleton<ILoggedInUserModel, LogedInUserModel>();
+            services.AddSingleton<IEventAggregator, EventAggregator>();
+            services.AddSingleton<IShellViewModel, ShellViewModel>();
+            services.AddScoped<IViewModel, EntryViewModel>();
+            services.AddTransient<IUserEndpoint, UserEndpoint>();
+            services.AddTransient<LoginViewModel>();
+            services.AddTransient<IViewModel, UserViewModel>();
+            services.AddScoped<ShellView>();
+            services.AddSingleton(s => GetShellWindow("Registration Sample", s));
+
+            return services.BuildServiceProvider();
         }
-
-        static ConfigurationBuilder BuildConfig()
-        {
-            var builder = new ConfigurationBuilder();
-            builder.SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false, true);
-            return builder;
-        }
-
-        private static Window GetShellWindow<T, V>(string title, T dataContext, V content)
+        private static Window GetShellWindow(string title, IServiceProvider serviceProvider)
         {
             return new Window
             {
                 Title = title,
-                DataContext = dataContext,
-                Content = content,
-                MinHeight = 400,
-                MinWidth = 400,
+                DataContext = serviceProvider.GetRequiredService<IShellViewModel>(),
+                Content = serviceProvider.GetRequiredService<ShellView>(),
+                MinHeight = 450,
+                MinWidth = 450,
                 SizeToContent = SizeToContent.WidthAndHeight,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen
             };
-        }
-
-        protected override async void OnExit(ExitEventArgs e)
-        {
-            await _host.StopAsync();
-            _host.Dispose();
-
-            base.OnExit(e);
         }
     }
 }

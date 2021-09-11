@@ -1,6 +1,6 @@
-﻿using RegistrationSample.OldDesktopUI.Library.EventModels;
+﻿using RegistrationSample.OldDesktopUI.EventModels;
 
-namespace RegistrationSample.OldDesktopUI.Library.Utilities
+namespace RegistrationSample.OldDesktopUI.Utility
 {
     public interface IEventAggregator
     {

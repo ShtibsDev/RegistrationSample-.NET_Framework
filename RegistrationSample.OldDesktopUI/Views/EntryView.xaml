@@ -20,6 +20,6 @@
         </Grid.RowDefinitions>
         <cc:TextBlock FontSize="36" HorizontalAlignment="Center" Content="Registration Sample" Grid.ColumnSpan="2"/>
         <Button Content="Log In" Command="{Binding GoToLogInCmd}" Margin="20" Style="{StaticResource btn-primary}" Grid.Row="1"/>
-        <Button Content="Register" Margin="20" Grid.Row="1" Style="{StaticResource btn-info}" Grid.Column="1"/>
+        <Button Content="Register" Command="{Binding GoToRegistrationCmd}" Margin="20" Grid.Row="1" Style="{StaticResource btn-info}" Grid.Column="1"/>
     </Grid>
 </UserControl>

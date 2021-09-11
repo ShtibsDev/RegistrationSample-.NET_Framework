@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using RegistrationSample.OldDesktopUI.Library.EventModels;
+using RegistrationSample.OldDesktopUI.EventModels;
 
-namespace RegistrationSample.OldDesktopUI.Library.Utilities
+namespace RegistrationSample.OldDesktopUI.Utility
 {
     public class EventAggregator : IEventAggregator
     {

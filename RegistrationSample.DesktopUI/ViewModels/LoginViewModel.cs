@@ -1,25 +1,23 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using Microsoft.Toolkit.Mvvm.Input;
-using RegistrationSample.DesktopUI.Helpers;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
+using Microsoft.Toolkit.Mvvm.Input;
+using RegistrationSample.DesktopUI.Library.API;
+using RegistrationSample.DesktopUI.Library.Utilities;
 
 namespace RegistrationSample.DesktopUI.ViewModels
 {
-    public class LoginViewModel : ObservableObject, IViewModel
+    public class LoginViewModel : BaseViewModel
     {
-        private readonly IApiHelper _api;
-
         private string _username;
         private string _password;
+        private string _errorMessage;
+        private readonly IUserEndpoint _userEndpoint;
 
-        public LoginViewModel(IApiHelper api)
+        public LoginViewModel(IUserEndpoint userEndpoint, IEventAggregator eventAggregator) : base(eventAggregator)
         {
-            _api = api;
-            LogInCmd = new AsyncRelayCommand(LogIn);
+            _userEndpoint = userEndpoint;
+            LogInCmd = new Utility.AsyncRelayCommand(LogIn);
         }
 
         public ICommand LogInCmd { get; }
@@ -41,6 +39,11 @@ namespace RegistrationSample.DesktopUI.ViewModels
                 OnPropertyChanged(nameof(CanLogIn));
             }
         }
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set => SetProperty(ref _errorMessage, value);
+        }
 
         public bool CanLogIn
         {
@@ -53,13 +56,18 @@ namespace RegistrationSample.DesktopUI.ViewModels
                 return false;
             }
         }
-
-        public string Name { get; set; }
-
         private async Task LogIn()
         {
-            var result = await _api.Authenticate(Username, Password);
-            MessageBox.Show($"Hello {result.userName}!");
+            try
+            {
+                var result = await _userEndpoint.Authenticate(Username, Password);
+                await _userEndpoint.GetLogedInUserInfo();
+                Navigate<UserViewModel>();
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
         }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 using System.Windows;
+using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
 using RegistrationSample.OldDesktopUI.Library.API;
 using RegistrationSample.OldDesktopUI.Library.Models;
-using RegistrationSample.OldDesktopUI.Library.Utilities;
+using RegistrationSample.OldDesktopUI.Models;
 using RegistrationSample.OldDesktopUI.Utility;
 using RegistrationSample.OldDesktopUI.ViewModels;
 using RegistrationSample.OldDesktopUI.Views;
@@ -34,18 +33,29 @@ namespace RegistrationSample.OldDesktopUI
         private IServiceProvider ConfigureServices()
         {
             var services = new ServiceCollection();
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<LoggedInUserModel, UserDisplayModel>();
+                cfg.CreateMap<UserDisplayModel, LoggedInUserModel>();
+                cfg.CreateMap<NewUserDisplayModel, NewUserModel>();
+            });
 
-            services.AddSingleton(sp => sp);
-            services.AddSingleton<IApiHelper, ApiHelper>();
-            services.AddSingleton<ILoggedInUserModel, LogedInUserModel>();
-            services.AddSingleton<IEventAggregator, EventAggregator>();
-            services.AddSingleton<IShellViewModel, ShellViewModel>();
-            services.AddScoped<IViewModel, EntryViewModel>();
-            services.AddTransient<IUserEndpoint, UserEndpoint>();
-            services.AddTransient<LoginViewModel>();
-            services.AddTransient<IViewModel, UserViewModel>();
-            services.AddScoped<ShellView>();
-            services.AddSingleton(s => GetShellWindow("Registration Sample", s));
+            var mapper = config.CreateMapper();
+
+            services.AddSingleton(sp => sp)
+                .AddSingleton<IApiHelper, ApiHelper>()
+                .AddSingleton<IEventAggregator, EventAggregator>()
+                .AddSingleton(mapper)
+                .AddSingleton<AuthenticatedUser>()
+                .AddSingleton<UserDisplayModel>()
+                .AddSingleton<ShellViewModel>()
+                .AddSingleton<ShellView>()
+                .AddScoped<EntryViewModel>()
+                .AddTransient<IUserEndpoint, UserEndpoint>()
+                .AddTransient<LoginViewModel>()
+                .AddTransient<UserViewModel>()
+                .AddTransient<RegistrationViewModel>()
+                .AddSingleton(s => GetShellWindow("Registration Sample (Old)", s));
 
             return services.BuildServiceProvider();
         }
@@ -54,7 +64,7 @@ namespace RegistrationSample.OldDesktopUI
             return new Window
             {
                 Title = title,
-                DataContext = serviceProvider.GetRequiredService<IShellViewModel>(),
+                DataContext = serviceProvider.GetRequiredService<ShellViewModel>(),
                 Content = serviceProvider.GetRequiredService<ShellView>(),
                 MinHeight = 450,
                 MinWidth = 450,

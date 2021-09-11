@@ -1,18 +1,22 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RegistrationSample.DesktopUI.Library.EventModels;
+using RegistrationSample.DesktopUI.Library.Utilities;
 
 namespace RegistrationSample.DesktopUI.ViewModels
 {
-    class BaseViewModel : ObservableObject, IViewModel
+    public class BaseViewModel : ObservableObject, IViewModel
     {
+        protected IEventAggregator _eventAggregator;
+
+        public BaseViewModel(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+        }
         public string Name { get; set; }
 
-        protected void NotifyChange(string propertyName)
+        protected void Navigate<T>() where T : IViewModel
         {
+            _eventAggregator.PublishEvent(new NavigationEvent(typeof(T)));
         }
     }
 }

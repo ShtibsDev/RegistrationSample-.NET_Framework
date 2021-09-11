@@ -6,8 +6,9 @@ namespace RegistrationSample.OldDesktopUI.Library.API
     public interface IUserEndpoint
     {
         Task<AuthenticatedUser> Authenticate(string username, string password);
-        Task GetLogedInUserInfo();
-        Task Update();
+        Task<LoggedInUserModel> GetLogedInUserInfo();
+        Task<LoggedInUserModel> RegisterUser(NewUserModel newUser);
+        Task Update(LoggedInUserModel user);
         Task LogUserOut();
     }
 }

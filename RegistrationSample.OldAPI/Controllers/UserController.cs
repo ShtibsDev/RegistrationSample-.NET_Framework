@@ -20,7 +20,30 @@ namespace RegistrationSample.OldAPI.Controllers
             {
                 var userId = RequestContext.Principal.Identity.GetUserId();
                 var data = new UserData();
-                return Ok(data.GetUserById(userId).First());
+                return Ok(data.GetUserById(userId));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpPost]
+        public IHttpActionResult RegisterUser([FromBody] UserModel user)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    user.Id = RequestContext.Principal.Identity.GetUserId();
+                    var data = new UserData();
+                    data.RegisterUser(user);
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
             }
             catch (Exception ex)
             {
@@ -36,6 +59,10 @@ namespace RegistrationSample.OldAPI.Controllers
                 if (ModelState.IsValid)
                 {
                     var userId = RequestContext.Principal.Identity.GetUserId();
+                    if (user.Id != userId)
+                    {
+                        return BadRequest("Id's does not match");
+                    }
                     var data = new UserData();
                     data.UpdateUser(user);
                     return Ok();

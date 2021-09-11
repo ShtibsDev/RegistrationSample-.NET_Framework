@@ -1,8 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
-namespace RegistrationSample.OldDesktopUI.Library.Models
+namespace RegistrationSample.DesktopUI.Library.Models
 {
     public interface ILoggedInUserModel : INotifyPropertyChanged
     {
@@ -14,7 +12,7 @@ namespace RegistrationSample.OldDesktopUI.Library.Models
         string LastName { get; set; }
         string Token { get; set; }
 
-        void AssignUser(ILoggedInUserModel user);
+        void AssignUser(ILoggedInUserModel user, bool broadcast = false);
         ILoggedInUserModel Clone();
         void ResetUser();
     }

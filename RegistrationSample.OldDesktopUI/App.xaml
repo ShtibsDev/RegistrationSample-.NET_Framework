@@ -18,6 +18,9 @@
         <DataTemplate DataType="{x:Type vm:UserViewModel}">
             <views:UserView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RegistrationViewModel}">
+            <views:RegistrationView/>
+        </DataTemplate>
         <!--#endregion VieModels to Views assignments-->
 
         <!--#region Converters -->

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.Toolkit.Mvvm.Input;
+using AutoMapper;
 using RegistrationSample.OldDesktopUI.Library.API;
-using RegistrationSample.OldDesktopUI.Library.Utilities;
+using RegistrationSample.OldDesktopUI.Models;
+using RegistrationSample.OldDesktopUI.Utility;
 
 namespace RegistrationSample.OldDesktopUI.ViewModels
 {
@@ -12,22 +12,24 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
         private string _username;
         private string _password;
         private string _errorMessage;
+        private readonly UserDisplayModel _user;
         private readonly IUserEndpoint _userEndpoint;
 
-        public LoginViewModel(IUserEndpoint userEndpoint, IEventAggregator eventAggregator) : base(eventAggregator)
+        public LoginViewModel(UserDisplayModel currentUser, IUserEndpoint userEndpoint, IMapper mapper, IEventAggregator eventAggregator) : base(mapper, eventAggregator)
         {
+            _user = currentUser;
             _userEndpoint = userEndpoint;
-            LogInCmd = new AsyncRelayCommand(LogIn);
+            LogInCmd = new AsyncCommand(LogIn, CanLogIn);
         }
 
-        public ICommand LogInCmd { get; }
+        public IAsyncCommand LogInCmd { get; }
         public string Username
         {
             get => _username;
             set
             {
                 SetProperty(ref _username, value);
-                OnPropertyChanged(nameof(CanLogIn));
+                LogInCmd.RaiseCanExecuteChanged();
             }
         }
         public string Password
@@ -36,7 +38,7 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
             set
             {
                 SetProperty(ref _password, value);
-                OnPropertyChanged(nameof(CanLogIn));
+                LogInCmd.RaiseCanExecuteChanged();
             }
         }
         public string ErrorMessage
@@ -44,24 +46,19 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
             get => _errorMessage;
             set => SetProperty(ref _errorMessage, value);
         }
-        public bool CanLogIn
-        {
-            get
-            {
-                if (Username?.Length > 0 && Password?.Length > 0 && !(LogInCmd as AsyncRelayCommand).IsRunning)
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
 
+        public bool CanLogIn()
+        {
+            return Username?.Length > 0 && Password?.Length > 0;
+        }
         private async Task LogIn()
         {
             try
             {
-                var result = await _userEndpoint.Authenticate(Username, Password);
-                await _userEndpoint.GetLogedInUserInfo();
+                var authentication = await _userEndpoint.Authenticate(Username, Password);
+                var loggedInUser = await _userEndpoint.GetLogedInUserInfo();
+                loggedInUser.Token = authentication.Access_token;
+                _user.AssignUser(_mapper.Map<UserDisplayModel>(loggedInUser));
                 Navigate<UserViewModel>();
             }
             catch (Exception ex)

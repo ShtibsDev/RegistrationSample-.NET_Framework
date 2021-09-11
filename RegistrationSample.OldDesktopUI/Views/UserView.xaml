@@ -15,7 +15,7 @@
         <sys:Boolean x:Key="DesignEditMode">false</sys:Boolean>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid MaxWidth="550">
         <!--#region TableDefinitions -->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -23,6 +23,7 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
@@ -49,43 +50,50 @@
         </TextBlock>
         <!--#endregion-->
 
+        <!--#region LastLogin -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="3">
+            <TextBlock Text="Last Login: " FontSize="10"/>
+            <TextBlock Text="{Binding User.LastLogin, StringFormat='dd/MM/yyyy HH:mm'}" d:Text="01/01/2021 13:31" FontSize="10"/>
+        </StackPanel>
+        <!--#endregion-->
+
         <!--#region FirstName -->
-        <cc:TextBlock Content="First Name: " FontWeight="Bold" Grid.Row="2"/>
-        <cc:TextBlock Content="{Binding User.FirstName}" d:Content="John" Grid.Column="2" Grid.Row="2"
+        <cc:TextBlock Content="First Name: " FontWeight="Bold" Grid.Row="3"/>
+        <cc:TextBlock Content="{Binding User.FirstName}" d:Content="John" Grid.Column="2" Grid.Row="3"
                       Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisReversed}}" 
                       d:Visibility="{Binding Source={StaticResource DesignEditMode}, Converter={StaticResource BoolToVisReversed}}" />
-        <TextBox Text="{Binding UserUpdate.FirstName}" d:Text="John" Grid.Column="2" Grid.Row="2"
+        <TextBox Text="{Binding UserUpdate.FirstName}" d:Text="John" Grid.Column="2" Grid.Row="3"
                       Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVis}}"
                       d:Visibility="{Binding Source={StaticResource DesignEditMode}, Converter={StaticResource BoolToVis}}" />
         <!--#endregion FirstName-->
 
         <!--#region LastName -->
-        <cc:TextBlock Content="Last Name: " FontWeight="Bold" Grid.Row="4"/>
-        <cc:TextBlock Content="{Binding User.LastName}" d:Content="Doe" Grid.Column="2" Grid.Row="4"
+        <cc:TextBlock Content="Last Name: " FontWeight="Bold" Grid.Row="5"/>
+        <cc:TextBlock Content="{Binding User.LastName}" d:Content="Doe" Grid.Column="2" Grid.Row="5"
                       Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisReversed}}" 
                       d:Visibility="{Binding Source={StaticResource DesignEditMode}, Converter={StaticResource BoolToVisReversed}}" />
-        <TextBox Text="{Binding UserUpdate.LastName}" d:Text="Doe" Grid.Column="2" Grid.Row="4"
+        <TextBox Text="{Binding UserUpdate.LastName}" d:Text="Doe" Grid.Column="2" Grid.Row="5"
                       Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVis}}"
                       d:Visibility="{Binding Source={StaticResource DesignEditMode}, Converter={StaticResource BoolToVis}}" />
         <!--#endregion LastName-->
 
         <!--#region Email -->
-        <cc:TextBlock Content="Email Address: " FontWeight="Bold" Grid.Row="6"/>
-        <cc:TextBlock Content="{Binding User.EmailAddress}" d:Content="johndoe@gmail.com" Grid.Column="2" Grid.Row="6"/>
+        <cc:TextBlock Content="Email Address: " FontWeight="Bold" Grid.Row="7"/>
+        <cc:TextBlock Content="{Binding User.EmailAddress}" d:Content="johndoe@gmail.com" Grid.Column="2" Grid.Row="7"/>
         <!--#endregion Email-->
 
         <!--#region BirthDate -->
-        <cc:TextBlock Content="Birth Date: " FontWeight="Bold" Grid.Row="8"/>
-        <cc:TextBlock Content="{Binding User.BirthDate}" ContentStringFormat="dd/MM/yyyy" d:Content="27/07/1998" Grid.Column="2" Grid.Row="8"
+        <cc:TextBlock Content="Birth Date: " FontWeight="Bold" Grid.Row="9"/>
+        <cc:TextBlock Content="{Binding User.BirthDate}" ContentStringFormat="dd/MM/yyyy" d:Content="27/07/1998" Grid.Column="2" Grid.Row="9"
                       Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVisReversed}}" 
                       d:Visibility="{Binding Source={StaticResource DesignEditMode}, Converter={StaticResource BoolToVisReversed}}" />
-        <DatePicker SelectedDate="{Binding UserUpdate.BirthDate, StringFormat=dd/MM/yyyy}" d:SelectedDate="1998-07-27" Grid.Column="2" Grid.Row="8"
+        <DatePicker SelectedDate="{Binding UserUpdate.BirthDate, StringFormat=dd/MM/yyyy}" d:SelectedDate="1998-07-27" Grid.Column="2" Grid.Row="9"
                       Visibility="{Binding IsInEditMode, Converter={StaticResource BoolToVis}}"
                       d:Visibility="{Binding Source={StaticResource DesignEditMode}, Converter={StaticResource BoolToVis}}" />
         <!--#endregion BirthDate-->
 
         <!--#region Action Buttons -->
-        <Grid Grid.ColumnSpan="3" Grid.Row="10" Margin="40 0">
+        <Grid Grid.ColumnSpan="3" Grid.Row="11" Margin="40 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
