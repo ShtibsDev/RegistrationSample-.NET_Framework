@@ -7,4 +7,8 @@ BEGIN
 	SELECT Id, FirstName,LastName,EmailAddress, BirthDate, LastLogin
 	FROM dbo.Users
 	WHERE Id = @Id;
+
+	UPDATE Users 
+	SET LastLogin = GETUTCDATE()
+	WHERE Id = @Id;
 END
