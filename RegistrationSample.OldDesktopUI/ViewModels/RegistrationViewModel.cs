@@ -15,7 +15,7 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
         private readonly IUserEndpoint _userEndpoint;
         private readonly UserDisplayModel _loggedInUser;
 
-        public RegistrationViewModel(IUserEndpoint userEndpoint, UserDisplayModel loggedInUser, IMapper mapper) : base(mapper)
+        public RegistrationViewModel(IUserEndpoint userEndpoint, UserDisplayModel loggedInUser, IMapper mapper, IEventAggregator eventAggregator) : base(mapper, eventAggregator)
         {
             _userEndpoint = userEndpoint;
             _loggedInUser = loggedInUser;
@@ -28,12 +28,26 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
 
         public async Task CreateUser()
         {
-            if (IsNewUserValid())
+            NewUser.Validate();
+            if (!NewUser.HasErrors)
             {
-                var currentUser = await _userEndpoint.RegisterUser(_mapper.Map<NewUserModel>(NewUser));
-                _loggedInUser.AssignUser(_mapper.Map<UserDisplayModel>(currentUser));
-                Navigate<UserViewModel>();
+
+                try
+                {
+                    await _userEndpoint.RegisterUser(_mapper.Map<NewUserModel>(NewUser));
+                    var authentication = await _userEndpoint.Authenticate(NewUser.EmailAddress, NewUser.Password);
+                    var loggedInUser = await _userEndpoint.GetLogedInUserInfo();
+                    loggedInUser.Token = authentication.Access_token;
+                    _loggedInUser.AssignUser(_mapper.Map<UserDisplayModel>(loggedInUser));
+                    Navigate<UserViewModel>();
+                }
+                catch (System.Exception)
+                {
+
+                    throw;
+                }
             }
+            
         }
 
         private bool IsNewUserValid()

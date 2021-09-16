@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using System;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using RegistrationSample.DesktopUI.Library.EventModels;
 using RegistrationSample.DesktopUI.Library.Utilities;
 

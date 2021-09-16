@@ -2,9 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cc="clr-namespace:RegistrationSample.OldDesktopUI.CustomControls"
              xmlns:vm="clr-namespace:RegistrationSample.OldDesktopUI.ViewModels"
+             xmlns:utility="clr-namespace:RegistrationSample.OldDesktopUI.Utility"
              d:DataContext="{d:DesignInstance Type={x:Type vm:RegistrationViewModel}}"
              d:Style="{StaticResource Dark}"
              mc:Ignorable="d" 
@@ -39,20 +41,22 @@
         <!--#region Title -->
         <TextBlock FontSize="36" Text="Registration" TextAlignment="Center" Grid.ColumnSpan="3" />
         <!--#endregion Title-->
-        
+
         <!--#region Email -->
         <cc:TextBlock Content="Email Address: " FontWeight="Bold" Grid.Row="2"/>
-        <TextBox Text="{Binding NewUser.EmailAddress}" d:Text="johndoe@gmail.com" Grid.Column="2" Grid.Row="2"/>
+        <TextBox Text="{Binding NewUser.EmailAddress, UpdateSourceTrigger=PropertyChanged    
+    , NotifyOnValidationError=False, ValidatesOnDataErrors=True }" d:Text="johndoe@gmail.com" Grid.Column="2" Grid.Row="2"/>
         <!--#endregion Email-->
 
         <!--#region Password -->
         <cc:TextBlock Content="Password: " FontWeight="Bold" Grid.Row="4"/>
-        <cc:PasswordBox Password="{Binding NewUser.Password}" d:Password="password" Grid.Column="2" Grid.Row="4"/>
+        <PasswordBox Tag="{Binding NewUser.Password, ValidatesOnDataErrors=True}" PasswordChanged="PasswordChanged" d:Password="password" Grid.Column="2" Grid.Row="4"/>
         <!--#endregion Password-->
 
         <!--#region Password -->
         <cc:TextBlock Content="Confirm Password: " FontWeight="Bold" Grid.Row="6"/>
-        <cc:PasswordBox Password="{Binding NewUser.ConfirmPassword}" d:Password="password" Grid.Column="2" Grid.Row="6"/>
+        <PasswordBox Tag="{Binding NewUser.ConfirmPassword, ValidatesOnDataErrors=True}" PasswordChanged="ConfirmPasswordChanged" d:Password="password" Grid.Column="2" Grid.Row="6"/>
+        <!--<cc:PasswordBox Password="{Binding NewUser.ConfirmPassword}" d:Password="password" Grid.Column="2" Grid.Row="6"/>-->
         <!--#endregion Password-->
 
         <!--#region FirstName -->
@@ -71,7 +75,7 @@
         <!--#endregion BirthDate-->
 
         <!--#region Action Button -->
-            <Button Content="Create User" Command="{Binding CreateUserCmd}" Style="{StaticResource btn-info}"  Margin="90 0" Grid.ColumnSpan="3" Grid.Row="14"/>
+        <Button Content="Create User" Command="{Binding CreateUserCmd}" Style="{StaticResource btn-info}"  Margin="90 0" Grid.ColumnSpan="3" Grid.Row="14"/>
         <!--#endregion Action Button-->
     </Grid>
 </UserControl>

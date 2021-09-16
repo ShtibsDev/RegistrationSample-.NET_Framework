@@ -24,5 +24,17 @@ namespace RegistrationSample.OldDesktopUI.Views
         {
             InitializeComponent();
         }
+
+        private void PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext != null)
+            { ((dynamic)DataContext).NewUser.Password = ((PasswordBox)sender).Password; }
+        }
+
+        private void ConfirmPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext != null)
+            { ((dynamic)DataContext).NewUser.ConfirmPassword = ((PasswordBox)sender).Password; }
+        }
     }
 }

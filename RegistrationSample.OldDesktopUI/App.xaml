@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:util="clr-namespace:RegistrationSample.OldDesktopUI.Utility"
              xmlns:vm="clr-namespace:RegistrationSample.OldDesktopUI.ViewModels"
+             xmlns:cc="clr-namespace:RegistrationSample.OldDesktopUI.CustomControls"
              xmlns:views="clr-namespace:RegistrationSample.OldDesktopUI.Views">
     <Application.Resources>
         <!--#region VieModels to Views assignments -->
@@ -424,87 +425,96 @@
         </Style>
         <!--#endregion Buttons-->
 
+        <ControlTemplate x:Key="TextBoxTemplate">
+            <Grid>
+                <Border Name="bd" BorderThickness="1" CornerRadius="4" BorderBrush="#66afe9" Opacity="0">
+                    <Border.Effect>
+                        <BlurEffect/>
+                    </Border.Effect>
+                </Border>
+                <Border Name="container" Padding="{TemplateBinding Padding}" Height="{TemplateBinding Height}" BorderThickness="2" BorderBrush="#ccc" Background="#fff" CornerRadius="4" Margin="1">
+                    <ScrollViewer Padding="0" x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                </Border>
+
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup>
+                        <VisualState Name="Normal"/>
+                        <VisualState Name="Focused">
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetName="container" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Duration="0:0:0.05" To="#66afe9"/>
+                                <DoubleAnimation Storyboard.TargetName="bd" Storyboard.TargetProperty="Opacity" Duration="0:0:0.05" To="1"/>
+                            </Storyboard>
+                        </VisualState>
+                        <VisualState Name="Disabled">
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetName="container" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Duration="0:0:0.05" To="#eee"/>
+                            </Storyboard>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="TextBoxError">
+            <Grid>
+                <Border Name="bd" BorderThickness="4" CornerRadius="4" BorderBrush="Salmon" Opacity="0">
+                    <Border.Effect>
+                        <BlurEffect/>
+                    </Border.Effect>
+                </Border>
+                <Border Name="container" Padding="{TemplateBinding Padding}" Height="{TemplateBinding Height}" BorderThickness="1" BorderBrush="#ccc" Background="#fff" CornerRadius="4" Margin="1">
+                    <ScrollViewer Padding="0" x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                </Border>
+
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup>
+                        <VisualState Name="Normal"/>
+                        <VisualState Name="Focused">
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetName="container" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)" Duration="0:0:0.05" To="Salmon"/>
+                                <DoubleAnimation Storyboard.TargetName="bd" Storyboard.TargetProperty="Opacity" Duration="0:0:0.05" To="1"/>
+                            </Storyboard>
+                        </VisualState>
+                        <VisualState Name="Disabled">
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetName="container" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Duration="0:0:0.05" To="#eee"/>
+                            </Storyboard>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="TexboxErrorTemplate">
+            <Grid>
+                <AdornedElementPlaceholder/>
+                <Border BorderBrush="Red" BorderThickness="2" CornerRadius="4" ToolTip="{Binding [0].ErrorContent}" Margin="1"/>
+            </Grid>
+        </ControlTemplate>
+
         <!--#region InputBoxes -->
         <Style TargetType="PasswordBox">
             <Setter Property="Padding" Value="4"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="PasswordBox">
-                        <Grid>
-                            <Border Name="bd" BorderThickness="1" CornerRadius="4" BorderBrush="#66afe9" Opacity="0">
-                                <Border.Effect>
-                                    <BlurEffect></BlurEffect>
-
-                                </Border.Effect>
-                            </Border>
-                            <Border Name="container" Padding="{TemplateBinding Padding}" Height="{TemplateBinding Height}" BorderThickness="1" BorderBrush="#ccc" Background="#fff" CornerRadius="4" Margin="1">
-                                <ScrollViewer Padding="0" x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            </Border>
-
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup>
-                                    <VisualState Name="Normal"></VisualState>
-                                    <VisualState Name="Focused">
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="container" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
-                                                        Duration="0:0:0.05" To="#66afe9"></ColorAnimation>
-                                            <DoubleAnimation Storyboard.TargetName="bd" Storyboard.TargetProperty="Opacity"
-                                                            Duration="0:0:0.05" To="1"></DoubleAnimation>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState Name="Disabled">
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="container" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                        Duration="0:0:0.05" To="#eee"></ColorAnimation>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Template" Value="{StaticResource TextBoxTemplate}" />
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TexboxErrorTemplate}"/>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                    <Setter Property="Template" Value="{StaticResource TextBoxError}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="4"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="TextBox">
-                        <Grid>
-                            <Border Name="bd" BorderThickness="1" CornerRadius="4" BorderBrush="#66afe9" Opacity="0">
-                                <Border.Effect>
-                                    <BlurEffect></BlurEffect>
-
-                                </Border.Effect>
-                            </Border>
-                            <Border Name="container" Padding="{TemplateBinding Padding}" Height="{TemplateBinding Height}" BorderThickness="1" BorderBrush="#ccc" Background="#fff" CornerRadius="4" Margin="1">
-                                <ScrollViewer Padding="0" x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            </Border>
-
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup>
-                                    <VisualState Name="Normal"></VisualState>
-                                    <VisualState Name="Focused">
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="container" Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
-                                                        Duration="0:0:0.05" To="#66afe9"></ColorAnimation>
-                                            <DoubleAnimation Storyboard.TargetName="bd" Storyboard.TargetProperty="Opacity"
-                                                            Duration="0:0:0.05" To="1"></DoubleAnimation>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState Name="Disabled">
-                                        <Storyboard>
-                                            <ColorAnimation Storyboard.TargetName="container" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                        Duration="0:0:0.05" To="#eee"></ColorAnimation>
-                                        </Storyboard>
-                                    </VisualState>
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Template" Value="{StaticResource TextBoxTemplate}"/>
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource TexboxErrorTemplate}"/>
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
+                    <Setter Property="Template" Value="{StaticResource TextBoxError}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <!--#endregion-->
     </Application.Resources>

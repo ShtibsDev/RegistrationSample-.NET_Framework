@@ -14,6 +14,6 @@ namespace RegistrationSample.DataAccess.Models
         [EmailAddress(ErrorMessage = "The provided email is invalid")]
         public string EmailAddress { get; set; }
         public DateTime BirthDate { get; set; }
-        public DateTime LastLogin { get; set; }
+        public DateTime? LastLogin { get; set; }
     }
 }

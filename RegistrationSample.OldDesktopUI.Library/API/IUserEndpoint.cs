@@ -7,7 +7,7 @@ namespace RegistrationSample.OldDesktopUI.Library.API
     {
         Task<AuthenticatedUser> Authenticate(string username, string password);
         Task<LoggedInUserModel> GetLogedInUserInfo();
-        Task<LoggedInUserModel> RegisterUser(NewUserModel newUser);
+        Task RegisterUser(NewUserModel newUser);
         Task Update(LoggedInUserModel user);
         Task LogUserOut();
     }

@@ -57,40 +57,11 @@ namespace RegistrationSample.OldDesktopUI.Library.API
                 }
             }
         }
-        public async Task<LoggedInUserModel> RegisterUser(NewUserModel newUser)
+        public async Task RegisterUser(NewUserModel newUser)
         {
-            var regestrationUser = new { Email = newUser.EmailAddress, newUser.Password, newUser.ConfirmPassword };
-
-            using (var response = await _apiHelper.ApiClient.PostAsJsonAsync(" api/Account/Register", regestrationUser))
+            using (var response = await _apiHelper.ApiClient.PostAsJsonAsync(" api/User", newUser))
             {
                 if (!response.IsSuccessStatusCode)
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
-            }
-
-            var authenticatedUser = await Authenticate(newUser.EmailAddress, newUser.Password);
-
-            if (authenticatedUser is null)
-            {
-                throw new Exception("Authentication Faild");
-            }
-
-            var userDetails = new LoggedInUserModel
-            {
-                FirstName = newUser.FirstName,
-                LastName = newUser.LastName,
-                EmailAddress = newUser.EmailAddress,
-                BirthDate = newUser.BirthDate
-            };
-
-            using (var response = await _apiHelper.ApiClient.PostAsJsonAsync(" api/Account/Register", userDetails))
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    return await GetLogedInUserInfo();
-                }
-                else
                 {
                     throw new Exception(response.ReasonPhrase);
                 }

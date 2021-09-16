@@ -55,6 +55,7 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
         {
             try
             {
+                ErrorMessage = string.Empty;
                 var authentication = await _userEndpoint.Authenticate(Username, Password);
                 var loggedInUser = await _userEndpoint.GetLogedInUserInfo();
                 loggedInUser.Token = authentication.Access_token;
@@ -63,7 +64,7 @@ namespace RegistrationSample.OldDesktopUI.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = ex.Message;
+                ErrorMessage = ex.Message == "Bad Request" ? "Your email or password are incorrect." : ex.Message;
             }
         }
     }

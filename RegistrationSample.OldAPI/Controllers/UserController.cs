@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using RegistrationSample.DataAccess.Models;
 using RegistrationSample.OdlDataAccess;
+using RegistrationSample.OldAPI.Models;
 
 namespace RegistrationSample.OldAPI.Controllers
 {
@@ -28,17 +32,43 @@ namespace RegistrationSample.OldAPI.Controllers
             }
         }
 
+
         [HttpPost]
-        public IHttpActionResult RegisterUser([FromBody] UserModel user)
+        [AllowAnonymous]
+        public async Task<IHttpActionResult> RegisterUser([FromBody] NewUserModel user)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    user.Id = RequestContext.Principal.Identity.GetUserId();
+                    var applicationUser = new ApplicationUser() { UserName = user.EmailAddress, Email = user.EmailAddress };
+                    var userManager = Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                    var result = await userManager.CreateAsync(applicationUser, user.Password);
+
+                    if (!result.Succeeded)
+                    {
+                        return GetErrorResult(result);
+                    }
+
+                    var newUser = new UserModel
+                    {
+                        Id = applicationUser.Id,
+                        EmailAddress = user.EmailAddress,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        BirthDate = user.BirthDate,
+                    };
                     var data = new UserData();
-                    data.RegisterUser(user);
-                    return Ok();
+                    try
+                    {
+                        data.RegisterUser(newUser);
+                        return Ok();
+                    }
+                    catch (Exception ex)
+                    {
+                        await userManager.DeleteAsync(applicationUser);
+                        return InternalServerError(ex);
+                    }
                 }
                 else
                 {
@@ -76,6 +106,35 @@ namespace RegistrationSample.OldAPI.Controllers
             {
                 return InternalServerError(ex);
             }
+        }
+
+        private IHttpActionResult GetErrorResult(IdentityResult result)
+        {
+            if (result == null)
+            {
+                return InternalServerError();
+            }
+
+            if (!result.Succeeded)
+            {
+                if (result.Errors != null)
+                {
+                    foreach (string error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                }
+
+                if (ModelState.IsValid)
+                {
+                    // No ModelState errors are available to send, so just return an empty BadRequest.
+                    return BadRequest();
+                }
+
+                return BadRequest(ModelState);
+            }
+
+            return null;
         }
     }
 }
