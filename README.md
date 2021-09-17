@@ -1,2 +1,2 @@
-# RegistrationSample-.NET_Framework-
+# RegistrationSample .NET Framework
 Simple example of a login system
